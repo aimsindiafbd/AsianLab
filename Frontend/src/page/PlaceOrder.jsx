@@ -73,8 +73,8 @@ const PlaceOrder = () => {
             if (response.data.success) {
                 setCartItem({});
                 localStorage.removeItem("cartItem");
-                toast.success("Order placed successfully!");
-                navigate("/orders");
+                // toast.success("Order placed successfully!");
+                navigate("/payment");
             } else {
                 toast.error(response.data.message);
             }
@@ -178,14 +178,14 @@ const PlaceOrder = () => {
                             onClick={handleCashOnDelivery}
                             className='bg-[#01ABCE] text-white rounded-md p-3 border text-center'
                         >
-                           {loadingCOD ? "Processing..." : "Cash on Delivery"}
+                           {loadingCOD ? "Processing..." : "Pay Online"}
                         </button>
-                        <button
+                        {/* <button
                             onClick={handleOnlinePayment}
                             className='bg-[#01ABCE] text-white rounded-md p-3 border text-center'
                         >
                             {loadingOnline ? "Processing..." : "Pay Online"}
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>
