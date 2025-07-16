@@ -21,24 +21,24 @@ const TestDetails = () => {
     TestPrices.ObsGynae.find((test) => test.id === id) ||
     TestPrices.OperativePackage.find((test) => test.id === id);
 
-  if (!test) {
-    return (
-      <div className="text-center text-red-500 text-xl font-bold">
-        Test not found
-      </div>
-    );
-  }
+  // if (!test) {
+  //   return (
+  //     <div className="text-center text-red-500 text-xl font-bold">
+  //       Test not found
+  //     </div>
+  //   );
+  // }
 
-  const isTestInCart =
-    cartItem[test.id] && cartItem[test.id][test.name] > 0;
+  // const isTestInCart =
+  //   cartItem[test.id] && cartItem[test.id][test.name] > 0;
 
-  const handleCartAction = () => {
-    if (isTestInCart) {
-      updateQuantity(test.id, test.name, 0);
-    } else {
-      addToCart(test.id, test.name);
-    }
-  };
+  // const handleCartAction = () => {
+  //   if (isTestInCart) {
+  //     updateQuantity(test.id, test.name, 0);
+  //   } else {
+  //     addToCart(test.id, test.name);
+  //   }
+  // };
 
   return (
     <>
@@ -71,25 +71,24 @@ const TestDetails = () => {
               <p className="text-black font-medium text-lg sm:py-1 text-right">
                 <strong>Offer Price:</strong> ₹{test.Price}
               </p>
-              <p
+              <p onClick={() => navigate("/place-order")}
                 className="px-4 py-2 rounded bg-[#00AECD] font-semibold cursor-pointer text-white text-center mt-2"
-                onClick={handleCartAction}
               >
-                {isTestInCart ? "Remove from Cart" : "Book Now"}
+                Book Now
               </p>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto">
-          {/* Cart Summary */}
+        {/* <div className="mx-auto">
+           Cart Summary
           {getCartCount() > 0 && (
             <div className="bg-[#00AECD] justify-around w-80 z-10 px-5 py-10 shadow-2xl rounded">
               <p className="text-white font-medium uppercase my-4">
                 Test in your cart: {getCartCount()}
               </p>
               <p
-                onClick={() => navigate("/cart")}
+                onClick={() => navigate("/place-order")}
                 className="cursor-pointer flex items-center justify-between bg-white p-2 rounded-full"
               >
                 Place Order Now
@@ -97,7 +96,7 @@ const TestDetails = () => {
               </p>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </>
   );

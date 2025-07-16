@@ -11,7 +11,12 @@ const FindATest = () => {
              <h1 className="text-3xl text-black font-medium text-center my-6">Asian Health Package</h1>
             <div className="grid grid-cols-3 ml-10 mt-10">
                 {TestPrices?.HealthPackage?.map((item, index) => (
-                    <div onClick={() => navigate(`/testDetails/${item.id}`)} key={index} style={{ backgroundColor: item.backgroundColor }} className='min-w-[250px] w-full sm:w-72 md:w-80 lg:w-[350px] p-4 rounded-lg shadow-lg hover:translate-y-[-10px] transition-all duration-500 my-3'>
+                    <div onClick={() => navigate(`/testDetails/${item.id}`)} key={index} style={{
+            backgroundImage: `url(${item.backgroundImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }} className='min-w-[250px] w-full sm:w-72 md:w-80 lg:w-[350px] p-4 rounded-lg shadow-lg hover:translate-y-[-10px] transition-all duration-500 my-3'>
                         <p className="text-black text-2xl font-bold sm:text-xl">{item.name}</p>
                         <p className="text-black font-normal line-through text-xl sm:text-lg flex justify-end">MRP: ₹{item.MRP}</p>
                         <p className="text-black font-medium text-xl sm:text-xl flex justify-end">Offer Price: ₹{item.Price}</p>

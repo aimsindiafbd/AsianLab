@@ -1,4 +1,10 @@
-
+import BronzeBackground from './AsianHealthFitBronze.jpg'
+import SilverBackground from './AsianHealthFitSilver.jpg'
+import GoldBackground from './AsianHealthFitGold.jpg'
+import PlatinumBackground from './AsianHealthFitPlatinumMale.jpg'
+import PlatinumFemaleBackground from './AsianHealthFitPlatinumFemale.jpg'
+import SapphireMaleBackground from './AsianHealthFitSapphireMale.jpg'
+import SapphireFemaleBackground from './AsianHealthFitSapphireFemale.jpg'
 
 export const TestPrices = {
     HealthPackage: [
@@ -10,7 +16,7 @@ export const TestPrices = {
             MRP: "5014",
             Price: 999,
             notice: "PHC Specialist Doctor Consultation Free",
-            backgroundColor: "#D8AF86"
+            backgroundImage: BronzeBackground
         },
         {
             id: "AHP02",
@@ -20,7 +26,7 @@ export const TestPrices = {
             MRP: "9499",
             Price: 1999,
             notice: "PHC Specialist Doctor Consultation Free",
-            backgroundColor: "#D6D7D4"
+            backgroundImage: SilverBackground
         },
         {
             id: "AHP03",
@@ -30,7 +36,7 @@ export const TestPrices = {
             MRP: "12783",
             Price: 2999,
             notice: "PHC Specialist Doctor Consultation Free",
-            backgroundColor: "#F1E2BB"
+            backgroundImage: GoldBackground
         },
         {
             id: "AHP04",
@@ -40,7 +46,7 @@ export const TestPrices = {
             MRP: "16046",
             Price: 3999,
             notice: "PHC Specialist Doctor Consultation Free",
-            backgroundColor: "#BDBAB5"
+            backgroundImage: PlatinumBackground
         },
         {
             id: "AHP05",
@@ -50,7 +56,7 @@ export const TestPrices = {
             MRP: "16326",
             Price: 3999,
             notice: "PHC Specialist Doctor Consultation Free",
-            backgroundColor: "#FFF3F7"
+            backgroundImage: PlatinumFemaleBackground
         },
         {
             id: "AHP06",
@@ -60,7 +66,7 @@ export const TestPrices = {
             MRP: "18669",
             Price: 4999,
             notice: "PHC Specialist Doctor Consultation Free",
-            backgroundColor: "#87B3D6"
+            backgroundImage: SapphireMaleBackground
         },
         {
             id: "AHP07",
@@ -70,7 +76,7 @@ export const TestPrices = {
             MRP: "18949",
             Price: 4999,
             notice: "PHC Specialist Doctor Consultation Free",
-            backgroundColor: "#C8A2C9"
+            backgroundImage:  SapphireFemaleBackground
         }
 
     ],

@@ -18,7 +18,7 @@ const Footer = () => {
             <hr className='bg-[#00AECD] ' />
             <div className="w-full h-full md:h-[400px] px-10 lg:h-[400px] flex items-center justify-center bg-cover bg-center relative sm:0px">
                 <div className="absolute inset-0  z-0"></div>
-                <div className='grid md:grid md:grid-cols-2 lg:grid-cols-4 my-10 z-10'>
+                <div className='grid md:grid md:grid-cols-2 lg:grid-cols-3 my-10 z-10'>
                     {/* Asian Lab Image with contennt */}
                     <div>
                         <NavLink to='/'>
@@ -35,7 +35,7 @@ const Footer = () => {
                     </div>                   
 
                     {/* Useful Links */}
-                    <div className='sm:px-8 mt-5 sm:mt-0'>
+                    {/* <div className='sm:px-8 mt-5 sm:mt-0'>
                         <div className='flex items-center gap-1'>
                             <p className='bg-white w-4 h-0.5'></p>
                             <h1 className='px-10 text-2xl text-[#00AECD]'>Useful Links</h1>
@@ -52,7 +52,7 @@ const Footer = () => {
                                 <IoIosArrowDropright />Contact Us
                             </NavLink>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Address, Phone No, Email */}
                     <div className='sm:px-8 py-5 mt-5 sm:mt-0'>
@@ -69,7 +69,7 @@ const Footer = () => {
                                 <CiLocationOn className='text-6xl py-2 w-10 h-10' />Badkal Flyover, Road, Sector 21A, Faridabad, Haryana 121001
                             </p>
                             <p className='flex items-center gap-2 py-1 hover:translate-y-[-2px] duration-500 transition-all text-[#00AECD]'>
-                                <MdAlternateEmail className='text-4xl py-2' /><a href="mailto:info@aimsindia.com">info@aimsindia.com</a>
+                                <MdAlternateEmail className='text-4xl py-2' /><a href="mailto:asianlabs@aimsindia.com">asianlabs@aimsindia.com</a>
                             </p>
                         </div>
                     </div>
@@ -77,19 +77,17 @@ const Footer = () => {
                     {/* Asian Connect */}
                     <div>
                          <div className='flex items-center gap-1 mt-[-18px]'>
-                            <h1 className='px-10 text-lg text-[#00AECD] mt-6'>Download Asian Connect 2.0</h1>
+                             <h1 className='px-10 text-lg text-[#00AECD] mt-6 mx-auto'>Download Asian Connect 2.0</h1>
                         </div>
                         <div>
+                            <center>
                            <NavLink to='https://play.google.com/store/apps/details?id=com.asianhospital'>
-                             <center>
                                 <img src={Andorid} alt="" className='my-6' />
-                             </center>
                            </NavLink>
                             <NavLink to='https://apps.apple.com/in/app/asian-connect-2-0/id6446682188'>
-                             <center>
                                 <img src={ios} alt="" className='my-6' />
-                             </center>
                            </NavLink>
+                            </center>
                         </div>
                     </div>
 

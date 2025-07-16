@@ -9,164 +9,92 @@ const PlaceOrder = () => {
     const [loadingCOD, setLoadingCOD] = useState(false);
     const [loadingOnline, setLoadingOnline] = useState(false);
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        city: '',
-        address: '',
-        state: '',
-        zipcode: '',
-        country: '',
-        phone: ''
+        firstName: '', lastName: '', email: '', address: '',
+        city: '', state: '', zipcode: '', country: '', phone: '', package: ''
     });
-
-    // Load cart from localStorage if empty
-    useEffect(() => {
-        if (!Object.keys(cartItem).length) {
-            const storedCart = localStorage.getItem("cartItem");
-            if (storedCart) {
-                setCartItem(JSON.parse(storedCart));
-            }
-        }
-    }, []);
-
     const onChangeHandler = (e) => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    const buildOrderItems = () => {
-        const orderItems = [];
-
-        for (const testId in cartItem) {
-            for (const itemName in cartItem[testId]) {
-                if (cartItem[testId][itemName] > 0) {
-                    const itemInfo =
-                        TestPrices.HealthPackage.find(test => test.id === testId) ||
-                        TestPrices.ObsGynae.find(test => test.id === testId) ||
-                        TestPrices.OperativePackage.find(test => test.id === testId);
-
-                    if (itemInfo) {
-                        orderItems.push({
-                            id: testId,
-                            name: itemName,
-                            quantity: cartItem[testId][itemName],
-                            price: itemInfo.Price,
-                        });
-                    }
-                }
-            }
-        }
-
-        return orderItems;
-    };
-
-    const handleCashOnDelivery = async () => {
-        setLoadingCOD(true);
         try {
-            const orderData = {
-                address: formData,
-                items: buildOrderItems(),
-                amount: getCartAmount(),
-            };
-
-            const response = await axios.post(`${backendUrl}/api/order/cash`, orderData, { headers: { token } });
-            if (response.data.success) {
-                setCartItem({});
-                localStorage.removeItem("cartItem");
-                // toast.success("Order placed successfully!");
-                navigate("/payment");
+            const res = await axios.post(`${backendUrl}/api/contact`, formData) // update if different backend URL
+            if (res.data.success) {
+                toast.success("Form submitted successfully!");
+                setFormData({
+                    firstName: '', lastName: '', email: '', address: '',
+                    city: '', state: '', zipcode: '', country: '', phone: '', package: ''
+                });
             } else {
-                toast.error(response.data.message);
+                toast.error(res.data.message || "Submission failed.");
             }
-        } catch (error) {
-            console.error("COD Error:", error);
-            toast.error("Failed to place Cash on Delivery order.");
-        }finally{
-            setLoadingCOD(false)
-        }
-    };
-
-    const handleOnlinePayment = async () => {
-        setLoadingOnline(true);
-        try {
-            const orderData = {
-                address: formData,
-                items: buildOrderItems(),
-                amount: getCartAmount(),
-            };
-
-            const res = await axios.post(`${backendUrl}/api/order/place-order`, orderData, { headers: { token } });
-
-            const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-                amount: res.data.order.amount,
-                currency: res.data.order.currency,
-                name: 'Order Payment',
-                description: 'Payment for test packages',
-                order_id: res.data.order.id,
-                handler: async (response) => {
-                    try {
-                        const verifyRes = await axios.post(`${backendUrl}/api/order/verifyRazorpay`, response, {
-                            headers: { token },
-                        });
-
-                        if (verifyRes.data.success) {
-                            setCartItem({});
-                            localStorage.removeItem("cartItem");
-                            toast.success("Payment successful!");
-                            navigate("/orders");
-                        } else {
-                            toast.error("Payment verification failed.");
-                        }
-                    } catch (err) {
-                        toast.error("Verification error. Try again.");
-                    }finally{
-                        setLoadingOnline(false);
-                    }
-                },
-                prefill: {
-                    name: `${formData.firstName} ${formData.lastName}`,
-                    email: formData.email,
-                    contact: formData.phone,
-                },
-                theme: {
-                    color: "#01ABCE",
-                },
-            };
-
-            const rzp = new window.Razorpay(options);
-            rzp.open();
-        } catch (error) {
-            console.error("Online Payment Error:", error);
-            toast.error("Failed to initialize online payment.");
-            setLoadingOnline(false)
+        } catch (err) {
+            toast.error("Something went wrong!");
+            console.error(err);
         }
     };
 
     return (
-        <div className='px-10 flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t'>
+        <div className='px-10 pt-5 sm:pt-14 min-h-[80vh] border-t mx-auto'>
             {/* Left: User Info */}
-            <div className='flex flex-col gap-4 w-full sm:max-w-[480px]'>
-                <h1 className='text-xl sm:text-2xl my-3'>User Information</h1>
-                <div className='flex gap-3'>
-                    <input required onChange={onChangeHandler} name='firstName' value={formData.firstName} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='First Name' />
-                    <input required onChange={onChangeHandler} name='lastName' value={formData.lastName} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='Last Name' />
-                </div>
-                <input required onChange={onChangeHandler} name='email' value={formData.email} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="email" placeholder='Email Address' />
-                <input required onChange={onChangeHandler} name='address' value={formData.address} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='Address' />
-                <div className='flex gap-3'>
-                    <input required onChange={onChangeHandler} name='city' value={formData.city} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='City' />
-                    <input required onChange={onChangeHandler} name='state' value={formData.state} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='State' />
-                </div>
-                <div className='flex gap-3'>
-                    <input required onChange={onChangeHandler} name='zipcode' value={formData.zipcode} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="number" placeholder='ZipCode' />
-                    <input required onChange={onChangeHandler} name='country' value={formData.country} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='Country' />
-                </div>
-                <input required onChange={onChangeHandler} name='phone' value={formData.phone} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="number" placeholder='Phone Number' />
+            <div className='gap-4 w-full sm:max-w-[480px] mx-auto'>
+                <form onSubmit={handleSubmit} className='gap-4 w-full sm:max-w-[480px] mx-auto'>
+                    <h1 className='text-xl sm:text-2xl my-3 text-center'>User Information</h1>
+
+                    <div className='flex gap-3 py-2'>
+                        <input required name='firstName' value={formData.firstName} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='First Name' />
+                        <input required name='lastName' value={formData.lastName} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='Last Name' />
+                    </div>
+
+                    <div className='py-2 flex gap-3'>
+                        <input required name='email' value={formData.email} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="email" placeholder='Email Address' />
+                        <input required name='address' value={formData.address} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='Address' />
+                    </div>
+
+                    <div className='flex gap-3 py-2'>
+                        <input required name='city' value={formData.city} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='City' />
+                        <input required name='state' value={formData.state} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='State' />
+                    </div>
+
+                    <div className='flex gap-3 py-2'>
+                        <input required name='zipcode' value={formData.zipcode} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="number" placeholder='ZipCode' />
+                        <input required name='country' value={formData.country} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="text" placeholder='Country' />
+                    </div>
+
+                    <input required name='phone' value={formData.phone} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full' type="number" placeholder='Phone Number' />
+
+                    <div className='flex gap-3 py-2'>
+                        <select required name="package" value={formData.package} onChange={onChangeHandler} className='border border-gray-300 rounded py-1.5 px-3.5 w-full'>
+                            <option value="">Select Package</option>
+                            <option value="Asian HealthFit Bronze">Asian HealthFit Bronze</option>
+                            <option value="Asian HealthFit Silver">Asian HealthFit Silver</option>
+                            <option value="Asian HealthFit Gold">Asian HealthFit Gold</option>
+                            <option value="Asian HealthFit Platinum - Male">Asian HealthFit Platinum - Male</option>
+                            <option value="Asian HealthFit Platinum - Female">Asian HealthFit Platinum - Female</option>
+                            <option value="Asian HealthFit Sapphire - Male">Asian HealthFit Sapphire - Male</option>
+                            <option value="Asian HealthFit Sapphire - Female">Asian HealthFit Sapphire - Female</option>
+                            <option value="Antel-Natal Panel-1">Antel-Natal Panel-1</option>
+                            <option value="Antel-Natal Panel-2">Antel-Natal Panel-2</option>
+                            <option value="PCOD Panel">PCOD Panel</option>
+                            <option value="Infertility Comprehensive Panel Female">Infertility Comprehensive Panel Female</option>
+                            <option value="Fertility Panel Male">Fertility Panel Male</option>
+                            <option value="Pre-Conceptional Panel">Pre-Conceptional Panel</option>
+                            <option value="Pre-Operative Panel Minor">Pre-Operative Panel Minor</option>
+                            <option value="Pre-Operative Panel Major">Pre-Operative Panel Major</option>
+                        </select>
+                    </div>
+
+                    <center>
+                        <button type="submit" className='bg-[#01ABCE] text-white rounded-md py-3 px-10 border my-10 text-center flex'>
+                            Submit
+                        </button>
+                    </center>
+                </form>
             </div>
 
             {/* Right: Cart Summary + Payment */}
-            <div className='mt-8'>
+            {/* <div className='mt-8'>
                 <div className='mt-8 min-w-80'>
                     <CartTotal />
                 </div>
@@ -180,15 +108,15 @@ const PlaceOrder = () => {
                         >
                            {loadingCOD ? "Processing..." : "Pay Online"}
                         </button>
-                        {/* <button
+                        <button
                             onClick={handleOnlinePayment}
                             className='bg-[#01ABCE] text-white rounded-md p-3 border text-center'
                         >
                             {loadingOnline ? "Processing..." : "Pay Online"}
-                        </button> */}
+                        </button>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

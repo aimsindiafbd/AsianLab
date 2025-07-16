@@ -25,7 +25,7 @@ import Allergy from './page/Allergy'
 import Pregancy from './page/Pregancy'
 import Swasthfit from './page/Swasthfit'
 import Diabetic from './page/Diabetic'
-import Payment from './page/Payment'
+import Thankyou from './page/Thankyou'
 
 const App = () => {
   const [loading, setLoading] = useState(false)
@@ -64,8 +64,8 @@ const App = () => {
         <Route path='/place-order' element={<PlaceOrder />} />
         <Route path='/orders' element={<Order />} />
         <Route path='/contact' element={<Contact />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/payment' element={<Payment />} />
+        <Route path='/about' element={<About />} />      
+        <Route path='/thankyou' element={<Thankyou />} />      
       </Routes>
       <Footer />
     </div>

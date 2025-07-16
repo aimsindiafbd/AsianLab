@@ -1,95 +1,50 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import axios from 'axios'
-import { backendUrl } from '../App'
-import { toast } from 'react-toastify'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { backendUrl } from '../App';
+import { toast } from 'react-toastify';
 
 const CheckOrder = ({ token }) => {
-  const [orders, setOrders] = useState([])
+  const [contacts, setContacts] = useState([]);
 
-  const fetchAllOrders = async () => {
-    if (!token) return;
-
+  const fetchAllContacts = async () => {
     try {
-      const response = await axios.post(backendUrl + '/api/order/list', {}, {
-        headers: { token }
-      });
-
-      console.log("API Response:", response.data);
+      const response = await axios.get(`${backendUrl}/api/contact`);
       if (response.data.success) {
-        setOrders(response.data.orders);
-      } else {
-        setOrders(response.data.orders.reverse());
+        setContacts(response.data.data);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
+      toast.error("Failed to fetch contact submissions");
     }
-  }
-
-
-  const statusHandler = async (e, orderId) => {
-    try {
-      const response = await axios.post(backendUrl + '/api/order/status', {
-        orderId,
-        status: e.target.value
-      }, {
-        headers: { token }
-      });
-
-      if (response.data.success) {
-        await fetchAllOrders();
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response?.data?.message || error.message);
-    }
-  }
-
+  };
 
   useEffect(() => {
-    fetchAllOrders();
-  }, [token])
+    fetchAllContacts();
+  }, []);
+
   return (
-    <div>
-      <h3 className='text-center py-6 text-2xl'>Order Page</h3>
-      {[...orders].reverse().map((order, index) => (
-        <div key={index} className='grid grid-cols-1 sm:grid-cols-[0.5fr_2fr_1fr] lg:grid-cols-[3fr_2fr_1fr_1fr] gap-3 items-start border-2 border-gray-200 p-5 md:p-8 my-4 text-xs sm:text-sm text-gray-700'>
-          <div>
-            {order.items.map((item, index) => {
-              if (index === order.items.length - 1) {
-                return <p key={index} className='py-0.5 font-bold text-black text-base'>{item.name}</p>
-              }
-            })}
-            <p className='text-base text-gray-800'><b>Price:</b> ₹{order.amount}</p>
-          </div>
-          <div>
-            <p className='text-base text-gray-800'>{order.address.firstName + " " + order.address.lastName}</p>
-            <p className='text-base text-gray-800'>{order.address.phone}</p>
-            <p className='text-base text-gray-800'>{order.address.address}</p>
-            <p className='text-base text-gray-800'>{order.address.country + ", " + order.address.state + ", " + order.address.city}</p>
-            <p className='text-base text-gray-800'>{order.address.zipcode}</p>
-          </div>
-          <div>
-            <p className='text-base text-gray-800'><b>Method: </b> {order.paymentMethod}</p>
-            <p className='text-base text-gray-800'><b>Payment: </b> {order.payment ? 'Done' : 'Pending'}</p>
-            <p className='text-base text-gray-800'>
-              <b>Date:</b> {new Date(order.date).toLocaleString('en-IN', {
-                dateStyle: 'medium',
-                timeStyle: 'short',
-                hour12: true
-              })}
-            </p>
-          </div>
-          <select onChange={(e) => statusHandler(e, order._id)} value={order.status} className='border border-gray-700 p-2 rounded-lg'>
-            <option value="Order Placed">Order Placed</option>
-            <option value="Completed">Completed</option>
-          </select>
-        </div>
-      ))}
+    <div className="p-6">
+      <h3 className='text-center py-6 text-2xl'>Contact Form Submissions</h3>
 
+      {contacts.length === 0 ? (
+        <p className="text-center text-gray-600">No contact submissions found.</p>
+      ) : (
+        contacts.map((contact, index) => (
+          <div key={index} className='border border-gray-300 p-4 rounded my-4 text-sm bg-white shadow'>
+            <p><b>Name:</b> {contact.firstName} {contact.lastName}</p>
+            <p><b>Email:</b> {contact.email}</p>
+            <p><b>Phone:</b> {contact.phone}</p>
+            <p><b>Address:</b> {contact.address}, {contact.city}, {contact.state}, {contact.zipcode}, {contact.country}</p>
+            <p><b>Selected Package:</b> {contact.package}</p>
+            <p><b>Submitted On:</b> {new Date(contact.date).toLocaleString('en-IN', {
+              dateStyle: 'medium',
+              timeStyle: 'short',
+              hour12: true
+            })}</p>
+          </div>
+        ))
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default CheckOrder
+export default CheckOrder;

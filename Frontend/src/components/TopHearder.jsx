@@ -5,6 +5,7 @@ import { IoIosMail } from "react-icons/io";
 import { CiLocationOn } from "react-icons/ci";
 import Logo from '../assets/Asian_logo.png'
 import DeliveryBoy from '../assets/DeliveryBoy.png'
+import TopLogo from '../assets/AsianLogo.png'
 const TopHearder = () => {
   const [location,setLocation] = useState({
     city:'',
@@ -43,16 +44,22 @@ const TopHearder = () => {
   }, []);
   return (
   <>
-<div className="overflow-hidden whitespace-nowrap bg-[#EA533E]">
-  <div className="inline-flex animate-marquee gap-10">
-    {[...Array(6)].map((_, i) => (
-      <div key={i} className="flex items-center gap-2 text-lg">
-        <span className='text-white'>Free Home Collection</span>
-        <img src={DeliveryBoy} className="w-8 h-8 inline-block" alt="" />
-      </div>
-    ))}
+<div className="bg-[#e5e2e2] px-4 py-2">
+  <div className="flex flex-col sm:flex-row sm:items-center justify-around sm:gap-10">
+    {/* Free Home Collection */}
+    <div className="flex items-center gap-2 text-lg mb-2 sm:mb-0">
+      <span className="text-black">Free Home Collection</span>
+      <img src={DeliveryBoy} className="w-8 h-8 inline-block" alt="Delivery Boy" />
+    </div>
+
+    {/* Asian Institute Info */}
+    <NavLink to="/" className="flex items-center gap-3 text-black">
+      <img src={TopLogo} className="h-8" alt="Asian Logo" />
+      <p className="pt-1 text-sm sm:text-base font-medium">Asian Institute of Medical Sciences</p>
+    </NavLink>
   </div>
 </div>
+
 
 
     <div className='bg-white'>
@@ -87,8 +94,8 @@ const TopHearder = () => {
       </div>
         <div className="hidden sm:flex items-center gap-2">
         <IoIosMail className="text-2xl text-[#00AECD]" />
-        <a href="mailto:info@aimsindia.com" className="text-black text-sm">
-        info@aimsindia.com
+        <a href="mailto:asianlabs@aimsindia.com" className="text-black text-sm">
+         asianlabs@aimsindia.com
         </a>
       </div>
        </div>
